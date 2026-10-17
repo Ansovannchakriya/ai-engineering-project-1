@@ -1,0 +1,12 @@
+# Building the models
+pandas>=2.2
+scikit-learn>=1.5
+joblib>=1.4
+matplotlib>=3.8
+
+# Serving them: FastAPI with the `fastapi` command, uvicorn and httpx (for tests)
+fastapi[standard]>=0.115
+
+# Notebooks and tests
+jupyterlab>=4.2
+pytest>=8

@@ -1,0 +1,145 @@
+# Sample requests for the API (start it first: fastapi dev app/main.py).
+# VS Code: install the "REST Client" extension, then click "Send Request" above a request.
+# JetBrains IDEs run this file as is.
+
+@base = http://127.0.0.1:8000
+
+### Is the API up? Is the model loaded?
+GET {{base}}/health
+
+### How was the model trained, and how good is it?
+GET {{base}}/models
+
+### One mushroom: pungent smell, black spore print (row 1 of the data: poisonous)
+POST {{base}}/mushroom/predict
+Content-Type: application/json
+
+{
+  "cap_shape": "convex",
+  "cap_surface": "smooth",
+  "cap_color": "brown",
+  "bruises": "yes",
+  "odor": "pungent",
+  "gill_attachment": "free",
+  "gill_spacing": "close",
+  "gill_size": "narrow",
+  "gill_color": "black",
+  "stalk_shape": "enlarging",
+  "stalk_root": "equal",
+  "stalk_surface_above_ring": "smooth",
+  "stalk_surface_below_ring": "smooth",
+  "stalk_color_above_ring": "white",
+  "stalk_color_below_ring": "white",
+  "veil_color": "white",
+  "ring_number": "one",
+  "ring_type": "pendant",
+  "spore_print_color": "black",
+  "population": "scattered",
+  "habitat": "urban"
+}
+
+### One mushroom: smells of almond, brown spore print (row 2 of the data: edible)
+POST {{base}}/mushroom/predict
+Content-Type: application/json
+
+{
+  "cap_shape": "convex",
+  "cap_surface": "smooth",
+  "cap_color": "yellow",
+  "bruises": "yes",
+  "odor": "almond",
+  "gill_attachment": "free",
+  "gill_spacing": "close",
+  "gill_size": "broad",
+  "gill_color": "black",
+  "stalk_shape": "enlarging",
+  "stalk_root": "club",
+  "stalk_surface_above_ring": "smooth",
+  "stalk_surface_below_ring": "smooth",
+  "stalk_color_above_ring": "white",
+  "stalk_color_below_ring": "white",
+  "veil_color": "white",
+  "ring_number": "one",
+  "ring_type": "pendant",
+  "spore_print_color": "brown",
+  "population": "numerous",
+  "habitat": "grasses"
+}
+
+### Several mushrooms in one call
+POST {{base}}/mushroom/predict/batch
+Content-Type: application/json
+
+[
+  {"cap_shape": "convex", "cap_surface": "smooth", "cap_color": "brown", "bruises": "yes",
+   "odor": "pungent", "gill_attachment": "free", "gill_spacing": "close", "gill_size": "narrow",
+   "gill_color": "black", "stalk_shape": "enlarging", "stalk_root": "equal",
+   "stalk_surface_above_ring": "smooth", "stalk_surface_below_ring": "smooth",
+   "stalk_color_above_ring": "white", "stalk_color_below_ring": "white", "veil_color": "white",
+   "ring_number": "one", "ring_type": "pendant", "spore_print_color": "black",
+   "population": "scattered", "habitat": "urban"},
+  {"cap_shape": "bell", "cap_surface": "smooth", "cap_color": "white", "bruises": "yes",
+   "odor": "anise", "gill_attachment": "free", "gill_spacing": "close", "gill_size": "broad",
+   "gill_color": "brown", "stalk_shape": "enlarging", "stalk_root": "club",
+   "stalk_surface_above_ring": "smooth", "stalk_surface_below_ring": "smooth",
+   "stalk_color_above_ring": "white", "stalk_color_below_ring": "white", "veil_color": "white",
+   "ring_number": "one", "ring_type": "pendant", "spore_print_color": "brown",
+   "population": "numerous", "habitat": "meadows"}
+]
+
+### A value the model never saw: notched gills (valid, but in no training row; see unseen_features)
+POST {{base}}/mushroom/predict
+Content-Type: application/json
+
+{
+  "cap_shape": "convex",
+  "cap_surface": "smooth",
+  "cap_color": "yellow",
+  "bruises": "yes",
+  "odor": "almond",
+  "gill_attachment": "notched",
+  "gill_spacing": "close",
+  "gill_size": "broad",
+  "gill_color": "black",
+  "stalk_shape": "enlarging",
+  "stalk_root": "club",
+  "stalk_surface_above_ring": "smooth",
+  "stalk_surface_below_ring": "smooth",
+  "stalk_color_above_ring": "white",
+  "stalk_color_below_ring": "white",
+  "veil_color": "white",
+  "ring_number": "one",
+  "ring_type": "pendant",
+  "spore_print_color": "brown",
+  "population": "numerous",
+  "habitat": "grasses"
+}
+
+### Invalid input -> 422 (a letter code instead of a word, and an unknown field)
+POST {{base}}/mushroom/predict
+Content-Type: application/json
+
+{
+  "cap_shape": "x",
+  "cap_surface": "smooth",
+  "cap_color": "brown",
+  "bruises": "yes",
+  "odor": "pungent",
+  "gill_attachment": "free",
+  "gill_spacing": "close",
+  "gill_size": "narrow",
+  "gill_color": "black",
+  "stalk_shape": "enlarging",
+  "stalk_root": "equal",
+  "stalk_surface_above_ring": "smooth",
+  "stalk_surface_below_ring": "smooth",
+  "stalk_color_above_ring": "white",
+  "stalk_color_below_ring": "white",
+  "veil_color": "white",
+  "ring_number": "one",
+  "ring_type": "pendant",
+  "spore_print_color": "black",
+  "population": "scattered",
+  "habitat": "urban",
+  "smells_nice": true
+}
